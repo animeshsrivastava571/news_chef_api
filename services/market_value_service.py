@@ -41,9 +41,14 @@ def call_model_market_value(state: OverallState):
 
     system_message = SystemMessage(
         content="""You are an Football Assistant agent tasked with determining the market value of a player.
-        If the market value is mentioned, return it.
-        Check for any spelling mistakes in the inputs eg: if the question says something about Ronaldo, infer that the 
-         the player name is Cristiano Ronaldo similarly for Messi etc. Otherwise, return 'Market value information not available.'"""
+        You have 2 jobs:
+        - Infer the player name from the input query. Note that the player name might not be exact eg. if its Ronaldo, it could be Cristiano Ronaldo
+        if its Messi then its Lionel Messi and so on.
+        - Use the player name to fetch the market value from the tool. 
+        - If the market value is available, return it. Otherwise, return 'Market value information not available.
+        - **Do not create your own responses. Use the tool to get the market value. 'Market value information not available'.**
+       
+        """
     )
     response = model2.invoke([system_message] + local_messages)
 

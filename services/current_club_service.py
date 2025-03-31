@@ -32,10 +32,13 @@ def call_model_current_club(state: OverallState):
         local_messages.append(HumanMessage(content=state["article"]))
 
     system_message = SystemMessage(
-        content="""You are an Football assistant agent tasked with determining the current club of a player.
-        Check for any spelling mistakes in the inputs eg: if the question says something about Ronaldo, infer that the 
-        the player name is Cristiano Ronaldo similarly for Messi etc.
-        If the club is mentioned, return it. Otherwise, return 'Current club information not available.'"""
+        content="""You are an Football Assistant agent tasked with determining the current club of a player.
+        You have 2 jobs:
+        - Infer the player name from the input query. Note that the player name might not be exact eg. if its Ronaldo, it could be Cristiano Ronaldo
+        if its Messi then its Lionel Messi and so on.
+        - Use the player name to fetch the current club from the tool. 
+        - If the current club is available, return it. Otherwise, return 'club information not available.
+        - **Do not create your own responses. Use the tool to get the current club. 'club information not available.**"""
     )
     response = model_current_club.invoke([system_message] + local_messages)
     print(f"state is {state}")
